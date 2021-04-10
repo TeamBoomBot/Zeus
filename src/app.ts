@@ -162,5 +162,57 @@ bot.command('ks_contests', async (ctx) => {
   }
 })
 
+// Misc all
+bot.command('upcoming', async (ctx) => {
+  const eventsCF = await upcomingContestsCodeforces()
+  const eventsCC = await upcomingContestsCodeChef()
+  const eventsAC = await upcomingContestsAtcoder()
+  let resultString = ''
+  for (const i of eventsCF.result) {
+    resultString = resultString + '\n\n' + getCodeforcesString(i.name, i.id, i.startTimeSeconds)
+  }
+  for (const i of eventsCC.result) {
+    resultString = resultString + '\n\n' + getCodeChefStringUpcoming(i.name, i.code, i.startDate)
+  }
+  for (const i of eventsAC.result) {
+    resultString = resultString + '\n\n' + getAtcoderString(i.title, i.id, i.startTimeSeconds)
+  }
+  try {
+    if (resultString === '') {
+      ctx.reply(constants.noContestMessage)
+      logger.info('Command (upcoming) ran perfectly')
+    } else {
+      ctx.reply(constants.miscReplyUpcoming + resultString, Extra.HTML())
+      logger.info('Command (upcoming) ran perfectly')
+    }
+  } catch (e) {
+    logger.error('Command (upcoming) not succesful\n:' + e)
+  }
+})
+
+bot.command('running', async (ctx) => {
+  const eventsCF = await runningContestsCodeforces()
+  const eventsCC = await runningContestsCodeChef()
+  let resultString = ''
+  for (const i of eventsCF.result) {
+    resultString = resultString + '\n\n' + getCodeforcesString(i.name, i.id, i.startTimeSeconds)
+  }
+  for (const i of eventsCC.result) {
+    resultString = resultString + '\n\n' + getCodeChefStringRunning(i.name, i.code, i.endDate)
+  }
+  try {
+    if (resultString === '') {
+      ctx.reply(constants.noContestMessage)
+      logger.info('Command (running) ran perfectly')
+    } else {
+      ctx.reply(constants.miscReplyRunning + resultString, Extra.HTML())
+      logger.info('Command (running) ran perfectly')
+    }
+  } catch (e) {
+    logger.error('Command (running) not succesful\n:' + e)
+  }
+})
+
+
 // Launching the bot
 bot.launch()
