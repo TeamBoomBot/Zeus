@@ -106,3 +106,34 @@ export async function upcomingContestsCodeChef (): Promise<UpcomingContestRespon
     }
   }
 }
+export async function runningContestsCodeChef (): Promise<UpcomingContestResponse> {
+  const re = await redisGet('cc_running')
+  if (re) {
+    return {
+      result: JSON.parse(re)
+    }
+  } else {
+    let response = await callCodeChefRunning()
+    if (response.error) {
+      await tokenHandler()
+      response = await callCodeChefRunning()
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    const res = response.response.data
+    const cc: Array<ContestResponseSchema> = []
+    try {
+      for (const item of res.result.data.content.contestList) {
+        cc.push(item)
+      }
+    } catch (err) {
+      console.log(constants.codeChefErr)
+    }
+    if (cc.length > 0) {
+      await redisSet('cc_running', JSON.stringify(cc))
+    }
+    return {
+      result: cc
+    }
+  }
+}
