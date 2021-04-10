@@ -8,7 +8,9 @@ export interface UpcomingRunningSchema {
     error: boolean;
     response: object;
 }
-
+export interface TokenSchema {
+   value: string;
+}
 export interface UpcomingContestResponse {
     result: Array<ContestResponseSchema>;
 }
