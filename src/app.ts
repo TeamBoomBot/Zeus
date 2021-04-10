@@ -279,5 +279,18 @@ bot.command('subscribe', async (ctx) => {
   ctx.reply('You have successfully subscribed to receive reminders for all the upcoming contests!')
 })
 
+// Redis
+export const client = redis.createClient(process.env.REDIS_URL)
+export const redisSet = promisify(client.set).bind(client)
+export const redisGet = promisify(client.get).bind(client)
+
+client.on('connect', function () {
+  try {
+    logger.info('Redis Client is connected')
+  } catch (e) {
+    logger.error('Unable to connect with the Redis Client')
+  }
+})
+
 // Launching the bot
 bot.launch()
