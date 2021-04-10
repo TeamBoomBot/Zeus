@@ -1,0 +1,2 @@
+# Zeus
+This is a fully functional and convenient Telegram Bot that serves you a catalog of ongoing and upcoming coding contests from various popular programming websites right to your Telegram chat box, so that you never miss out on your next big coding spree! If you're beginner don't worry, you can browse through numerous contests and take your first big step!
